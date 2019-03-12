@@ -16,6 +16,8 @@
 	
 	<properties>
 		<poi.version>4.0.1</poi.version>
+		<poi-ooxml.version>4.0.1</poi-ooxml.version>
+		<poi-scratchpad.version>4.0.1</poi-scratchpad.version>
 		<hadoop-core.version>1.1.1</hadoop-core.version>
 		<hadoop-common.version>2.9.2</hadoop-common.version>
 		<hadoop-hdfs.version>2.9.2</hadoop-hdfs.version>
@@ -61,6 +63,16 @@
 		    <artifactId>poi</artifactId>
 		    <version>${poi.version}</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi-ooxml</artifactId>
+		    <version>${poi-ooxml.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+		    <artifactId>poi-scratchpad</artifactId>
+		    <version>${poi-scratchpad.version}</version>
+		</dependency>
 		
 		<!-- Hadoop support -->
 		<!-- This dependency will cause error.
@@ -88,7 +100,21 @@
 		    <version>${hadoop-hdfs-client.version}</version>
 		    <scope>provided</scope>
 		</dependency>
-	
+		
+		<!-- Unpack zip support -->
+		<dependency>
+		    <groupId>org.apache.ant</groupId>
+		    <artifactId>ant</artifactId>
+		    <version>1.8.2</version>
+		</dependency>
+		
+		<!-- Spark -->
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-core_2.11</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

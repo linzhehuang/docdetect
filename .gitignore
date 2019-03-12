@@ -1,1 +1,7 @@
+# Maven target folder.
 target/
+# The eclipse configuration files and folder.
+.classpath
+.project
+.settings/
+
