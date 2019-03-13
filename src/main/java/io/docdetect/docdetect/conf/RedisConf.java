@@ -1,8 +1,26 @@
 package io.docdetect.docdetect.conf;
 
-public interface RedisConf {
-	public String getHost();
-	public void setHost(String host);
-	public int getPort();
-	public void setPort(int port);
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+
+@Configuration
+@ConfigurationProperties(prefix = "redis") 
+@PropertySource("classpath:redis.yml")
+public class RedisConf {
+	private String host;
+	private int port;
+	
+	public String getHost() {
+		return host;
+	}
+	public void setHost(String host) {
+		this.host = host;
+	}
+	public int getPort() {
+		return port;
+	}
+	public void setPort(int port) {
+		this.port = port;
+	}
 }

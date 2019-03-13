@@ -8,7 +8,7 @@ public class JobDispatcher {
 	private static final String JOBID_SET = "jobid_set";
 	private static final String USING_SET = "using_set";
 	
-	private JobDispatcher instance = null;
+	private static JobDispatcher instance = null;
 	private Jedis jedis = null;
 	private int jobIdSize = 0;  
 	private int maxJobIdSize = 1024; // The maximum number of job id. Default is 1024.
@@ -27,20 +27,20 @@ public class JobDispatcher {
 		pipeline.sync();
 	}
 	
-	public JobDispatcher getInstance(RedisConf conf, int maxJobIdSize) {
+	public static JobDispatcher getInstance(RedisConf conf, int maxJobIdSize) {
 		// Create the instance if not exist.
 		if (instance == null) instance = new JobDispatcher(conf, maxJobIdSize);
 		
 		return instance;
 	}
 	
-	public JobDispatcher getInstance(RedisConf conf) {
-		return this.getInstance(conf, 1024);
+	public static JobDispatcher getInstance(RedisConf conf) {
+		return getInstance(conf, 1024);
 	}
 	
 	public String applyJobId() {
 		String id = null;
-		synchronized (instance) {
+		synchronized (this) {
 			if (jobIdSize < maxJobIdSize) return null;
 			else {
 				// Modify redis data.
@@ -54,7 +54,7 @@ public class JobDispatcher {
 	}
 	
 	public void recycleJobId(String jobId) {
-		synchronized (instance) {
+		synchronized (this) {
 			if (jedis.srem(USING_SET, jobId).equals(1)) {
 				jedis.sadd(JOBID_SET, jobId);
 				jobIdSize--;

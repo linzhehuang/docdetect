@@ -9,7 +9,7 @@ spring:
 
 server:
   session:
-  # 会话超时时间
+    # 会话超时时间
     timeout: 2000
   
 hdfs:

@@ -1,3 +1,4 @@
 # Description
 
-The project is a document detection system. 
+The project is a document detection system.
+
