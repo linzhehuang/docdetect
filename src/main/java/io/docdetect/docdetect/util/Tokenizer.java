@@ -14,6 +14,7 @@ public class Tokenizer {
 	public void load() {
 		segmentation = SegmentationFactory
 				.getSegmentation(SegmentationAlgorithm.MaxNgramScore);
+		segmentation.seg("loading...");
 	}
 	
 	public InputStream seg(String text) {

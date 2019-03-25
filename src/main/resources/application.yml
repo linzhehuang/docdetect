@@ -9,8 +9,8 @@ hdfs:
   home: /opt/hadoop-2.9.2
 
 spark:
-  host: 192.168.1.167
-  port: 7077
+  host: local
+  port: ~
 
 spring:
   session:

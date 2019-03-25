@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Doc Detect</title>
+	<script type="text/javascript" src="./index.js" defer></script>
+</head>
+<body>
+	<form id="fileForm" enctype="multipart/form-data">
+		<span></span>
+		<input type="file" name="file"/>
+	</form>
+	<p>
+		<input type="button" value="Upload" id="uploadBtn" onclick="uploadZipFile()" />
+	</p>
+	<p>
+		<input type="button" value="Process" id="processBtn" onclick="process()" />
+	</p>
+	<div id="result">
+	
+	</div>
+</body>
+</html>
