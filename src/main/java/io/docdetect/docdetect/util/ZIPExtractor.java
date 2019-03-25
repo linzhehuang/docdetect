@@ -16,13 +16,16 @@ public class ZIPExtractor {
 	 * Unpack the zip file to specified output directory.
 	 * @param zipFilePath
 	 * @param outputPath
+	 * @return all output files path from zip file
 	 * @throws IOException 
 	 */
-	static public void unzip(String zipFilePath, String outputPath) throws IOException {
+	static public List<String> unzip(String zipFilePath, String outputPath) throws IOException {
 		File file = new File(zipFilePath);
 		ZipFile zipFile = new ZipFile(file, "GBK");
 		@SuppressWarnings("unchecked")
 		Enumeration<ZipEntry> entries = zipFile.getEntries();
+		
+		List<String> list = new ArrayList<String>();
 		
 		ZipEntry entry = null;
 		while (entries.hasMoreElements()) {
@@ -35,6 +38,8 @@ public class ZIPExtractor {
  					if (!f.mkdirs()) throw new IOException();
  				}
  			} else {
+ 				// Add to the file list.
+				list.add(outputPath + File.separator + name);
  				// Delete the old file.
  				if (f.exists()) f.delete();
  				// Create new file.
@@ -50,31 +55,6 @@ public class ZIPExtractor {
  				input.close();
  			}
 		}
-	}
-	/**
-	 * Get the file list in zip file.
-	 * @param zipFilePath
-	 * @param basePath
-	 * @return A file list.
-	 * @throws IOException
-	 */
-	static public List<String> getFiles(String zipFilePath, String basePath) throws IOException {
-		File file = new File(zipFilePath);
-		ZipFile zipFile = new ZipFile(file, "GBK");
-		@SuppressWarnings("unchecked")
-		Enumeration<ZipEntry> entries = zipFile.getEntries();
-		
-		List<String> list = new ArrayList<String>();
-		ZipEntry entry = null;
-		while (entries.hasMoreElements()) {
-			entry = entries.nextElement();
-			String name = entry.getName();
-			if (!entry.isDirectory()) {
-				// Add to the file list.
-				list.add(basePath + File.separator + name);
-			}
-		}
-		
 		return list;
 	}
 }

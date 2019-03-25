@@ -1,6 +1,5 @@
 package io.docdetect.docdetect.util;
 
-import io.docdetect.docdetect.conf.RedisConf;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Pipeline;
 
@@ -11,13 +10,13 @@ public class JobDispatcher {
 	private static JobDispatcher instance = null;
 	private Jedis jedis = null;
 	private int jobIdSize = 0;  
-	private int maxJobIdSize = 1024; // The maximum number of job id. Default is 1024.
+	private int maxJobIdSize; // The maximum number of job id.
 	
-	private JobDispatcher(RedisConf conf, int maxJobIdSize) {
+	private JobDispatcher(String host, int port, int maxJobIdSize) {
 		this.maxJobIdSize = maxJobIdSize;
 		
 		// Create a jedis instance.
-		if (jedis == null) jedis = new Jedis(conf.getHost(), conf.getPort());
+		if (jedis == null) jedis = new Jedis(host, port);
 		// Remove the old set if exist.
 		if (jedis.exists(JOBID_SET)) jedis.del(JOBID_SET);
 		// Initial the job id set.
@@ -27,23 +26,25 @@ public class JobDispatcher {
 		pipeline.sync();
 	}
 	
-	public static JobDispatcher getInstance(RedisConf conf, int maxJobIdSize) {
+	public static JobDispatcher getInstance(String host, int port, int maxJobIdSize) {
 		// Create the instance if not exist.
-		if (instance == null) instance = new JobDispatcher(conf, maxJobIdSize);
+		if (instance == null) instance = new JobDispatcher(host, port, maxJobIdSize);
 		
 		return instance;
 	}
 	
-	public static JobDispatcher getInstance(RedisConf conf) {
-		return getInstance(conf, 1024);
+	public boolean isConnect() {
+		if (jedis == null) return false;
+		if ("PONG".equalsIgnoreCase(jedis.ping())) return true;
+		return false;
 	}
 	
 	public String applyJobId() {
 		String id = null;
 		synchronized (this) {
-			if (jobIdSize < maxJobIdSize) return null;
+			if (jobIdSize > maxJobIdSize) return null;
 			else {
-				// Modify redis data.
+				// Modify data on redis.
 				id = jedis.spop(JOBID_SET);
 				if (id == null) return null;
 				jedis.sadd(USING_SET, id);
@@ -55,7 +56,7 @@ public class JobDispatcher {
 	
 	public void recycleJobId(String jobId) {
 		synchronized (this) {
-			if (jedis.srem(USING_SET, jobId).equals(1)) {
+			if (jedis.srem(USING_SET, jobId).equals(1L)) {
 				jedis.sadd(JOBID_SET, jobId);
 				jobIdSize--;
 			}

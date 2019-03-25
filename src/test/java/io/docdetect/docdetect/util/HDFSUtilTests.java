@@ -1,27 +1,25 @@
 package io.docdetect.docdetect.util;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.ByteArrayInputStream;
 
-import org.apache.tools.ant.filters.StringInputStream;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class HDFSUtilTests {
 	
+	private static final String FILE = "/tmp/test.txt";
+	private static final byte[] FILE_DATA = new String("TEST\n").getBytes();
+	
+	@Autowired
+	HDFSUtil hdfsUtil;
+	
 	@Test
-	public void mainTest() {
-		HDFSUtil hdfsUtil = null;
-		try {
-			hdfsUtil = new HDFSUtil("hdfs://192.168.1.3:9000", "wzserver3", "/opt/hadoop-2.9.2");
-			hdfsUtil.createFile("/test.txt", new StringInputStream("12346878978464"));
-		} catch (IllegalArgumentException | IOException | URISyntaxException e) {
-			e.printStackTrace();
-		}
+	public void test() {
+		hdfsUtil.create(FILE, new ByteArrayInputStream(FILE_DATA));
 	}
 }

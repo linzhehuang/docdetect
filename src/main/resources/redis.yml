@@ -1,4 +1,0 @@
-redis:
-  # 配置 Redis
-  host: 192.168.1.3
-  port: 6379

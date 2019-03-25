@@ -1,24 +1,28 @@
 package io.docdetect.docdetect.util;
 
-import java.io.FileNotFoundException;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 public class WordExtractorTests {
+	private static final String WORD_FILE = "test/test.doc";
+	
 	@Test
 	public void extractTest() {
 		try {
-			WordExtractor.extract("/tmp/test.doc", "/tmp/test.txt");
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ClassPathResource resource = new ClassPathResource(WORD_FILE);
+			String wordFilePath = resource.getFile().getAbsolutePath();
+			assertNotNull(WordExtractor.extract(wordFilePath));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail(e.getMessage());
 		}
 	}
 }

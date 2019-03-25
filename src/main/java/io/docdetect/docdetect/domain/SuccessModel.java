@@ -1,8 +1,8 @@
 package io.docdetect.docdetect.domain;
 
-public class ReturnValue {
+public class SuccessModel {
 	private boolean success = true;
-	public ReturnValue(boolean success) {
+	public SuccessModel(boolean success) {
 		this.success = success;
 	}
 	public boolean isSuccess() {

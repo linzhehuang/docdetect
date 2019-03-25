@@ -1,6 +1,6 @@
 package io.docdetect.docdetect.util;
 
-import java.io.IOException;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,8 +8,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 public class FileUtilTests {
+	private static final String FILE = "/tmp/test.txt";
+	private static final byte[] FILE_DATA = new String("TEST\n").getBytes();
+	
 	@Test
-	public void createFileTest() throws IOException {
-		FileUtil.createFile("/tmp/demo/test.txt", new String("some thing here\n").getBytes());
+	public void createTest() {
+		assertTrue(FileUtil.create(FILE, FILE_DATA));
+	}
+	
+	@Test
+	public void removeTest() {
+		assertTrue(FileUtil.create(FILE, FILE_DATA));
+		assertTrue(FileUtil.remove(FILE));
 	}
 }
