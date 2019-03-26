@@ -34,6 +34,6 @@ public class ZIPExtractorTests {
 	
 	@After
 	public void cleanUp() {
-		FileUtil.remove(OUTPUT_PATH);
+		//FileUtil.remove(OUTPUT_PATH);
 	}
 }

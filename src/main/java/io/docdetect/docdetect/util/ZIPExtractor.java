@@ -20,28 +20,22 @@ public class ZIPExtractor {
 	 * @throws IOException 
 	 */
 	static public List<String> unzip(String zipFilePath, String outputPath) throws IOException {
-		File file = new File(zipFilePath);
-		ZipFile zipFile = new ZipFile(file, "GBK");
+		ZipFile zipFile = new ZipFile(new File(zipFilePath), "GBK");
 		@SuppressWarnings("unchecked")
 		Enumeration<ZipEntry> entries = zipFile.getEntries();
+		List<String> files = new ArrayList<String>();
 		
-		List<String> list = new ArrayList<String>();
-		
-		ZipEntry entry = null;
 		while (entries.hasMoreElements()) {
-			entry = entries.nextElement();
-			String name = entry.getName();
-			File f = new File(outputPath + File.separator + name);
- 			if (entry.isDirectory()) {
- 				// Create new directory.
- 				if (!f.exists()) {
- 					if (!f.mkdirs()) throw new IOException();
- 				}
- 			} else {
- 				// Add to the file list.
-				list.add(outputPath + File.separator + name);
- 				// Delete the old file.
+			ZipEntry entry = entries.nextElement();
+			String name = outputPath + File.separator + entry.getName();
+			File f = new File(name);
+ 			if (!entry.isDirectory()) {
+ 				files.add(name);
+ 				// Delete old file.
  				if (f.exists()) f.delete();
+ 				// Create parent path.
+ 				if (!f.getParentFile().exists())
+					f.getParentFile().mkdirs();
  				// Create new file.
  				if (!f.createNewFile()) throw new IOException();
  				InputStream input = zipFile.getInputStream(entry);
@@ -53,8 +47,15 @@ public class ZIPExtractor {
  					output.write(buf, 0, count);
  				output.close();
  				input.close();
+ 			} else {
+ 				// Create new directory.
+ 				if (!f.exists()) {
+ 					if (!f.mkdirs()) throw new IOException();
+ 				}
  			}
 		}
-		return list;
+		
+		return files;
 	}
+	
 }
