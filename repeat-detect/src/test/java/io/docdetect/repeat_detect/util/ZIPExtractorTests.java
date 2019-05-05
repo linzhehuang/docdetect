@@ -1,4 +1,4 @@
-package io.docdetect.docdetect.util;
+package io.docdetect.repeat_detect.util;
 
 import static org.junit.Assert.fail;
 

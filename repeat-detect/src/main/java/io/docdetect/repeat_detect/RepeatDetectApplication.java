@@ -8,10 +8,10 @@ import io.docdetect.repeat_detect.conf.ApplicationConf;
 
 @SpringBootApplication
 @Import(ApplicationConf.class)
-public class DocdetectApplication {
+public class RepeatDetectApplication {
 	
 	public static void main(String[] args) {
-		SpringApplication.run(DocdetectApplication.class, args);
+		SpringApplication.run(RepeatDetectApplication.class, args);
 	}
 	
 }

@@ -1,4 +1,4 @@
-package io.docdetect.docdetect.controller;
+package io.docdetect.repeat_detect.controller;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;

@@ -1,16 +1,16 @@
 redis: &redis
-  host: 192.168.1.3
+  host: 192.168.1.111
   port: 6379
 
 hdfs:
-  host: 192.168.1.167
+  host: 192.168.1.111
   port: 9000
-  user-name: lin
+  user-name: user
   home: /opt/hadoop-2.9.2
 
 spark:
-  host: local
-  port: ~
+  host: 192.168.1.111 # or using local mode host: local
+  port: 7077          #                     port: ~
 
 spring:
   session:

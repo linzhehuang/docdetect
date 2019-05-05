@@ -1,4 +1,4 @@
-package io.docdetect.docdetect.conf;
+package io.docdetect.repeat_detect.conf;
 
 import static org.junit.Assert.assertNotNull;
 

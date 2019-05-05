@@ -1,4 +1,4 @@
-package io.docdetect.docdetect;
+package io.docdetect.repeat_detect;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -93,7 +93,7 @@ public class RootController {
 		List<String> remoteFiles = new ArrayList<String>();
 		String uri = hdfsUtil.getURI();
 		for (String file : localFiles) {
-			String prefix = file.substring(0, file.lastIndexOf("."));
+			String prefix = file.substring(file.lastIndexOf("/") + 1, file.lastIndexOf("."));
 			String remoteFile = new StringBuffer(basePath)
 					.append("/").append(prefix).append(".txt").toString();
 			remoteFiles.add(uri + remoteFile);
