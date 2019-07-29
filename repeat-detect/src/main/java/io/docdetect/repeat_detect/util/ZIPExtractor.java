@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -18,17 +21,18 @@ public class ZIPExtractor {
 	 * @param outputPath
 	 * @return all output files path from zip file
 	 * @throws IOException 
+	 * @throws URISyntaxException 
 	 */
-	static public List<String> unzip(String zipFilePath, String outputPath) throws IOException {
-		ZipFile zipFile = new ZipFile(new File(zipFilePath), "GBK");
+	static public List<String> unzip(String zipFilePath, String outputPath) throws IOException, URISyntaxException {
+		ZipFile zipFile = new ZipFile(Paths.get(new URI(zipFilePath)).toFile(), "GBK");
 		@SuppressWarnings("unchecked")
 		Enumeration<ZipEntry> entries = zipFile.getEntries();
 		List<String> files = new ArrayList<String>();
 		
 		while (entries.hasMoreElements()) {
 			ZipEntry entry = entries.nextElement();
-			String name = outputPath + File.separator + entry.getName();
-			File f = new File(name);
+			String name = outputPath + "/" + entry.getName();
+			File f = Paths.get(new URI(name)).toFile();
  			if (!entry.isDirectory()) {
  				files.add(name);
  				// Delete old file.

@@ -1,6 +1,7 @@
 package io.docdetect.repeat_detect.controller;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.docdetect.repeat_detect.conf.ApplicationConf;
 import io.docdetect.repeat_detect.domain.CompareModel;
 import io.docdetect.repeat_detect.domain.ProcessResultModel;
 import io.docdetect.repeat_detect.domain.SuccessModel;
@@ -30,7 +32,6 @@ import io.docdetect.repeat_detect.util.ZIPExtractor;
 @RestController
 public class RootController {
 	
-	private static final  String TEMP_PATH = "/tmp/docdetect";
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
@@ -41,6 +42,8 @@ public class RootController {
 	private ProcessService service;
 	@Autowired
 	private Tokenizer tokenizer;
+	@Autowired
+	private ApplicationConf applicationConf;
 	
 	@RequestMapping(value = "/uploadzip", method = RequestMethod.POST)
 	public SuccessModel uploadZip(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
@@ -53,15 +56,15 @@ public class RootController {
 			return new SuccessModel(false);
 		}
 		// Save zip file to temporary path.
-		String zipFile = new StringBuffer(TEMP_PATH)
+		String zipFileURI = new StringBuffer(applicationConf.getTempURI())
 				.append("/").append(id)
 				.append("/").append(id).append(".zip").toString();
 		
 		try {
-			FileUtil.create(zipFile, file.getBytes());
+			FileUtil.create(zipFileURI, file.getBytes());
 		} catch (IOException e) {
 			log.info("Failed to save zip file.");
-			FileUtil.remove(zipFile);
+			FileUtil.remove(zipFileURI);
 			return new SuccessModel(false);
 		}
 		// Save job id to the session.
@@ -76,12 +79,12 @@ public class RootController {
 		String id = (String)request.getSession().getAttribute("jobId");
 		if (id == null) return ret;
 		// Extract the zip file.
-		String basePath = new StringBuffer(TEMP_PATH)
+		String basePath = new StringBuffer(applicationConf.getTempURI())
 				.append("/").append(id).toString();
 		List<String> localFiles;
 		try {
 			localFiles = ZIPExtractor.unzip(basePath + "/" + id + ".zip", basePath);
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			log.info("Extract zip file failed.");
 			return ret;
 		}
@@ -91,19 +94,25 @@ public class RootController {
 		}
 		// Process the data.
 		List<String> remoteFiles = new ArrayList<String>();
-		String uri = hdfsUtil.getURI();
+		//String uri = (hdfsUtil.getUse())? hdfsUtil.getURI(): "file://";
 		for (String file : localFiles) {
 			String prefix = file.substring(file.lastIndexOf("/") + 1, file.lastIndexOf("."));
 			String remoteFile = new StringBuffer(basePath)
 					.append("/").append(prefix).append(".txt").toString();
-			remoteFiles.add(uri + remoteFile);
+			remoteFiles.add(remoteFile);
+			//remoteFiles.add(uri + remoteFile);
 			// Extractor text from word file.
 			String text = WordExtractor.extract(file);
 			if (text == null) return ret;
-			// Upload to HDFS.
-			if (!hdfsUtil.create(remoteFile, tokenizer.seg(text))) {
-				log.info("Upload to HDFS failed.");
-				return ret;
+			
+			if (hdfsUtil.getUse()) {
+				// Upload to HDFS.
+				if (!hdfsUtil.create(remoteFile, tokenizer.seg(text))) {
+					log.info("Upload to HDFS failed.");
+					return ret;
+				}
+			} else {
+				FileUtil.create(remoteFile, tokenizer.seg(text));
 			}
 		}
 		// Computing

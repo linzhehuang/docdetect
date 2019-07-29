@@ -8,6 +8,9 @@ import io.docdetect.repeat_detect.util.HDFSUtil;
 
 @Configuration
 public class HDFSUtilConf {
+	
+	@Value("${hdfs.use}")
+	private boolean use;
 	@Value("${hdfs.host}")
 	private String hdfsHost;
 	@Value("${hdfs.port}")
@@ -19,6 +22,8 @@ public class HDFSUtilConf {
 	
 	@Bean("hdfsUtil")
 	public HDFSUtil hdfsUtil() {
-		return new HDFSUtil(hdfsHost, hdfsPort, hdfsUserName, hdfsHome);
+		return (use) ?
+				new HDFSUtil(hdfsHost, hdfsPort, hdfsUserName, hdfsHome):
+				new HDFSUtil();
 	}
 }

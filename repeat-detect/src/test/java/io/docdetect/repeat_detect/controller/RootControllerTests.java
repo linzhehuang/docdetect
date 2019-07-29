@@ -35,7 +35,7 @@ public class RootControllerTests {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Test
-	public void uploadZipTest() throws Exception {
+	public void mainTest() throws Exception {
 		// Get test.zip file.
 		ClassPathResource resouce = new ClassPathResource("test/test.zip");
 		MockMultipartFile file = new MockMultipartFile("file", new FileInputStream(resouce.getFile()));

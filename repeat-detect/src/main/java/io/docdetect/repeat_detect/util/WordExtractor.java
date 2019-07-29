@@ -3,6 +3,9 @@ package io.docdetect.repeat_detect.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
@@ -20,12 +23,12 @@ public class WordExtractor {
 	}
 	
 	static private String extractDoc(String wordFile) {
-		File file = new File(wordFile);
 		HWPFDocument document = null;
 		try {
+			File file = Paths.get(new URI(wordFile)).toFile();
 			document = new HWPFDocument(new FileInputStream(file));
 			return document.getDocumentText();
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();
 			return null;
 		} finally {
@@ -38,13 +41,13 @@ public class WordExtractor {
 	}
 	
 	static private String extractDocx(String wordFile) {
-		File file = new File(wordFile);
 		XWPFWordExtractor extractor = null;
 		try {
+			File file = Paths.get(new URI(wordFile)).toFile();
 			XWPFDocument document = new XWPFDocument(new FileInputStream(file));
 			extractor = new XWPFWordExtractor(document);
 			return extractor.getText();
-		} catch (IOException e) {
+		} catch (IOException | URISyntaxException e) {
 			e.printStackTrace();
 			return null;
 		} finally {

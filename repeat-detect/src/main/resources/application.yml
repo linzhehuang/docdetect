@@ -1,16 +1,17 @@
 redis: &redis
-  host: 192.168.1.111
+  host: 127.0.0.1
   port: 6379
 
 hdfs:
+  use: false # false - use local file system
   host: 192.168.1.111
   port: 9000
   user-name: user
   home: /opt/hadoop-2.9.2
 
 spark:
-  host: 192.168.1.111 # or using local mode host: local
-  port: 7077          #                     port: ~
+  host: local #192.168.1.111 # or using local mode host: local
+  port: ~ #7077          #                     port: ~
 
 spring:
   session:
@@ -21,3 +22,6 @@ spring:
 server:
   session:
     timeout: 2000
+    
+temp:
+  uri: file:///c:/Users/zehong.lin/tmp

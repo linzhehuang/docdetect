@@ -2,7 +2,7 @@
 		var ajaxXHR = createXMLHttpRequest();
 		var ajaxData = {
 			requestType: arguments[0].requestType || "POST",
-			contentType: arguments[0].contentType || "application/json",
+			contentType: arguments[0].contentType || "",
 			url: arguments[0].url || "",
 			async: arguments[0].async || true,
 			data: arguments[0].data || "{}",
@@ -47,7 +47,7 @@
 		return document.createElement(tagName);
 	}
 	// 
-	var baseURL = 'http://localhost:8080';  // Comment this line before build project.
+	var baseURL = 'http://127.0.0.1:8080';  // Comment this line before build project.
 	function uploadZipFile() {
 		var formData = new FormData($('fileForm'));
 		ajax({

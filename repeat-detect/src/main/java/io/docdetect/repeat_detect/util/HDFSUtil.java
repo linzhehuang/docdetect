@@ -14,6 +14,7 @@ public class HDFSUtil {
 	private static final String HADOOP_USER_NAME = "HADOOP_USER_NAME";
 	private static final String HADOOP_HOME = "hadoop.home.dir";
 
+	private boolean use;
 	private String uri;
 	private FileSystem fs = null;
 	
@@ -36,6 +37,10 @@ public class HDFSUtil {
 		// Configuration HADOOP environment.
 		System.setProperty(HADOOP_USER_NAME, userName);
 		System.setProperty(HADOOP_HOME, home);
+	}
+	
+	public HDFSUtil() {
+		use = false;
 	}
 	
 	public void close() {
@@ -84,5 +89,9 @@ public class HDFSUtil {
 	
 	public String getURI() {
 		return uri;
+	}
+	
+	public boolean getUse() {
+		return use;
 	}
 }

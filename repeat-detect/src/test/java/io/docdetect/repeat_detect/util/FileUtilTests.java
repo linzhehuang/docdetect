@@ -10,17 +10,17 @@ import io.docdetect.repeat_detect.util.FileUtil;
 
 @RunWith(SpringRunner.class)
 public class FileUtilTests {
-	private static final String FILE = "/tmp/test.txt";
+	private static final String FILE_URI = "file:///c/Users/zehong.lin/tmp/test.txt";
 	private static final byte[] FILE_DATA = new String("TEST\n").getBytes();
 	
 	@Test
 	public void createTest() {
-		assertTrue(FileUtil.create(FILE, FILE_DATA));
+		assertTrue(FileUtil.create(FILE_URI, FILE_DATA));
 	}
 	
 	@Test
 	public void removeTest() {
-		assertTrue(FileUtil.create(FILE, FILE_DATA));
-		assertTrue(FileUtil.remove(FILE));
+		assertTrue(FileUtil.create(FILE_URI, FILE_DATA));
+		assertTrue(FileUtil.remove(FILE_URI));
 	}
 }
